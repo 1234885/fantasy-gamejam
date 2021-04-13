@@ -1,4 +1,5 @@
 controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
+    facingUp = true
     facingRight = false
     facingLeft = false
     facingDown = false
@@ -80,6 +81,7 @@ controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
 controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
     facingRight = false
     facingLeft = true
+    facingDown = false
     animation.runImageAnimation(
     Playablecharacter,
     [img`
@@ -158,6 +160,7 @@ controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
     facingLeft = false
     facingRight = true
+    facingDown = false
     animation.runImageAnimation(
     Playablecharacter,
     [img`
@@ -315,13 +318,33 @@ controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
     ememies.destroy()
 })
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
+    if (facingDown) {
+        Playablecharacter.y += -13
+        pause(100)
+        Playablecharacter.y += 2
+    } else if (facingLeft) {
+        Playablecharacter.x += 13
+        pause(100)
+        Playablecharacter.x += -2
+    } else if (facingRight) {
+        Playablecharacter.x += -13
+        pause(100)
+        Playablecharacter.x += 2
+    } else if (facingUp) {
+        Playablecharacter.y += 13
+        pause(100)
+        Playablecharacter.y += -2
+    }
+})
 let playableCharacterProjectile: Sprite = null
 let facingDown = false
 let facingLeft = false
 let facingRight = false
+let facingUp = false
 let ememies: Sprite = null
 let Playablecharacter: Sprite = null
-game.splash("Kill The Monsters!         (aka your mother)")
+game.splash("Kill The Monsters!")
 info.setLife(3)
 let timebetweenpresses = 850
 let lastpressed = 0
@@ -348,6 +371,49 @@ scene.cameraFollowSprite(Playablecharacter)
 Playablecharacter.setPosition(randint(27, 98), randint(24, 90))
 Playablecharacter.setStayInScreen(true)
 ememies = sprites.create(sprites.builtin.forestSnake0, SpriteKind.Enemy)
+if (!(ememies.overlapsWith(Playablecharacter))) {
+    ememies.setPosition(randint(27, 98), randint(24, 90))
+}
+animation.runImageAnimation(
+ememies,
+[img`
+    . . . . c c c c c c . . . . . . 
+    . . . c 6 7 7 7 7 6 c . . . . . 
+    . . c 7 7 7 7 7 7 7 7 c . . . . 
+    . c 6 7 7 7 7 7 7 7 7 6 c . . . 
+    . c 7 c 6 6 6 6 c 7 7 7 c . . . 
+    . f 7 6 f 6 6 f 6 7 7 7 f . . . 
+    . f 7 7 7 7 7 7 7 7 7 7 f . . . 
+    . . f 7 7 7 7 6 c 7 7 6 f c . . 
+    . . . f c c c c 7 7 6 f 7 7 c . 
+    . . c 7 2 7 7 7 6 c f 7 7 7 7 c 
+    . c 7 7 2 7 7 c f c 6 7 7 6 c c 
+    c 1 1 1 1 7 6 f c c 6 6 6 c . . 
+    f 1 1 1 1 1 6 6 c 6 6 6 6 f . . 
+    f 6 1 1 1 1 1 6 6 6 6 6 c f . . 
+    . f 6 1 1 1 1 1 1 6 6 6 f . . . 
+    . . c c c c c c c c c f . . . . 
+    `,img`
+    . . . c c c c c c . . . . . . . 
+    . . c 6 7 7 7 7 6 c . . . . . . 
+    . c 7 7 7 7 7 7 7 7 c . . . . . 
+    c 6 7 7 7 7 7 7 7 7 6 c . . . . 
+    c 7 c 6 6 6 6 c 7 7 7 c . . . . 
+    f 7 6 f 6 6 f 6 7 7 7 f . . . . 
+    f 7 7 7 7 7 7 7 7 7 7 f . . . . 
+    . f 7 7 7 7 6 c 7 7 6 f . . . . 
+    . . f c c c c 7 7 6 f c c c . . 
+    . . c 6 2 7 7 7 f c c 7 7 7 c . 
+    . c 6 7 7 2 7 7 c f 6 7 7 7 7 c 
+    . c 1 1 1 1 7 6 6 c 6 6 6 c c c 
+    . c 1 1 1 1 1 6 6 6 6 6 6 c . . 
+    . c 6 1 1 1 1 1 6 6 6 6 6 c . . 
+    . . c 6 1 1 1 1 1 7 6 6 c c . . 
+    . . . c c c c c c c c c c . . . 
+    `],
+500,
+true
+)
 game.onUpdate(function () {
     Playablecharacter.y += controller.dy(70)
 })
@@ -463,9 +529,12 @@ forever(function () {
         false
         )
         playableCharacterProjectile = sprites.createProjectileFromSprite(img`
-            3 3 3 
+            . . . . 
+            . . . . 
+            . . . . 
+            . . . . 
             `, Playablecharacter, 0, 0)
-        playableCharacterProjectile.setPosition(playableCharacterProjectile.x + 10, playableCharacterProjectile.y)
+        playableCharacterProjectile.setPosition(playableCharacterProjectile.x + 18, playableCharacterProjectile.y)
         playableCharacterProjectile.lifespan = 2000
         music.knock.play()
         lastpressed = game.runtime()
@@ -602,16 +671,10 @@ forever(function () {
         false
         )
         playableCharacterProjectile = sprites.createProjectileFromSprite(img`
-            3 3 3 3 3 3 3 3 3 3 
-            3 3 3 3 3 3 3 3 3 3 
-            3 3 3 3 3 3 3 3 3 3 
-            3 3 3 3 3 3 3 3 3 3 
-            3 3 3 3 3 3 3 3 3 3 
-            3 3 3 3 3 3 3 3 3 3 
-            3 3 3 3 3 3 3 3 3 3 
-            3 3 3 3 3 3 3 3 3 3 
-            3 3 3 3 3 3 3 3 3 3 
-            3 3 3 3 3 3 3 3 3 3 
+            . . . . 
+            . . . . 
+            . . . . 
+            . . . . 
             `, Playablecharacter, 0, 0)
         playableCharacterProjectile.setPosition(playableCharacterProjectile.x - 10, playableCharacterProjectile.y)
         playableCharacterProjectile.lifespan = 2000
@@ -725,20 +788,17 @@ forever(function () {
         false
         )
         playableCharacterProjectile = sprites.createProjectileFromSprite(img`
-            3 3 3 3 3 3 3 3 3 3 
-            3 3 3 3 3 3 3 3 3 3 
-            3 3 3 3 3 3 3 3 3 3 
-            3 3 3 3 3 3 3 3 3 3 
-            3 3 3 3 3 3 3 3 3 3 
-            3 3 3 3 3 3 3 3 3 3 
-            3 3 3 3 3 3 3 3 3 3 
-            3 3 3 3 3 3 3 3 3 3 
-            3 3 3 3 3 3 3 3 3 3 
-            3 3 3 3 3 3 3 3 3 3 
+            . . . . 
+            . . . . 
+            . . . . 
+            . . . . 
             `, Playablecharacter, 0, 0)
         playableCharacterProjectile.setPosition(playableCharacterProjectile.y + 10, playableCharacterProjectile.x)
         playableCharacterProjectile.lifespan = 2000
         music.knock.play()
         lastpressed = game.runtime()
     }
+})
+forever(function () {
+	
 })
