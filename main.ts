@@ -414,6 +414,9 @@ ememies,
 500,
 true
 )
+if (ememies.x + 10 <= Playablecharacter.x && ememies.y + 10 <= Playablecharacter.x) {
+    ememies.follow(Playablecharacter, 20)
+}
 game.onUpdate(function () {
     Playablecharacter.y += controller.dy(70)
 })
@@ -529,13 +532,21 @@ forever(function () {
         false
         )
         playableCharacterProjectile = sprites.createProjectileFromSprite(img`
-            . . . . 
-            . . . . 
-            . . . . 
-            . . . . 
+            . . 5 . 5 . 
+            4 . 4 5 . . 
+            . 5 5 5 . 4 
+            4 4 . 2 5 . 
+            . . 4 . 2 . 
+            . . 5 4 . 2 
+            . 4 . 4 . . 
+            4 . 5 2 5 . 
+            . 5 4 2 . 2 
+            . 2 2 5 2 . 
+            2 . 2 . 5 . 
+            . 2 . 5 2 2 
             `, Playablecharacter, 0, 0)
         playableCharacterProjectile.setPosition(playableCharacterProjectile.x + 18, playableCharacterProjectile.y)
-        playableCharacterProjectile.lifespan = 2000
+        playableCharacterProjectile.lifespan = 100
         music.knock.play()
         lastpressed = game.runtime()
     } else if (controller.A.isPressed() && facingLeft == true && game.runtime() - lastpressed >= timebetweenpresses) {
@@ -671,13 +682,21 @@ forever(function () {
         false
         )
         playableCharacterProjectile = sprites.createProjectileFromSprite(img`
-            . . . . 
-            . . . . 
-            . . . . 
-            . . . . 
+            . . 5 . 5 . 
+            4 . 4 5 . . 
+            . 5 5 5 . 4 
+            4 4 . 2 5 . 
+            . . 4 . 2 . 
+            . . 5 4 . 2 
+            . 4 . 4 . . 
+            4 . 5 2 5 . 
+            . 5 4 2 . 2 
+            . 2 2 5 2 . 
+            2 . 2 . 5 . 
+            . 2 . 5 2 2 
             `, Playablecharacter, 0, 0)
         playableCharacterProjectile.setPosition(playableCharacterProjectile.x - 10, playableCharacterProjectile.y)
-        playableCharacterProjectile.lifespan = 2000
+        playableCharacterProjectile.lifespan = 100
         music.knock.play()
         lastpressed = game.runtime()
     } else if (controller.A.isPressed() && facingDown == true && game.runtime() - lastpressed >= timebetweenpresses) {
@@ -788,17 +807,22 @@ forever(function () {
         false
         )
         playableCharacterProjectile = sprites.createProjectileFromSprite(img`
-            . . . . 
-            . . . . 
-            . . . . 
-            . . . . 
+            . . 5 . 5 . 
+            4 . 4 5 . . 
+            . 5 5 5 . 4 
+            4 4 . 2 5 . 
+            . . 4 . 2 . 
+            . . 5 4 . 2 
+            . 4 . 4 . . 
+            4 . 5 2 5 . 
+            . 5 4 2 . 2 
+            . 2 2 5 2 . 
+            2 . 2 . 5 . 
+            . 2 . 5 2 2 
             `, Playablecharacter, 0, 0)
-        playableCharacterProjectile.setPosition(playableCharacterProjectile.y + 10, playableCharacterProjectile.x)
-        playableCharacterProjectile.lifespan = 2000
+        playableCharacterProjectile.setPosition(playableCharacterProjectile.x, playableCharacterProjectile.y + 15)
+        playableCharacterProjectile.lifespan = 100
         music.knock.play()
         lastpressed = game.runtime()
     }
-})
-forever(function () {
-	
 })
