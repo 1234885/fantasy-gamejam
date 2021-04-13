@@ -316,7 +316,8 @@ let facingDown = false
 let facingLeft = false
 let facingRight = false
 let Playablecharacter: Sprite = null
-game.splash("Kill The Monsters!")
+game.splash("Kill The Monsters!         (aka your mother)")
+info.setLife(3)
 let timebetweenpresses = 850
 let lastpressed = 0
 tiles.setTilemap(tilemap`level2`)
