@@ -1,3 +1,8 @@
+enum ActionKind {
+    Walking,
+    Idle,
+    Jumping
+}
 namespace SpriteKind {
     export const building = SpriteKind.create()
     export const hole = SpriteKind.create()
@@ -83,8 +88,8 @@ controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
     )
 })
 function enemyAwareness () {
-    if ((ememies.x + 20 >= Playablecharacter.x || ememies.x - 20 <= Playablecharacter.x) && (ememies.y + 20 >= Playablecharacter.y || ememies.y - 20 <= Playablecharacter.y)) {
-        ememies.follow(Playablecharacter, 20)
+    if ((ememyOne.x + 20 >= Playablecharacter.x || ememyOne.x - 20 <= Playablecharacter.x) && (ememyOne.y + 20 >= Playablecharacter.y || ememyOne.y - 20 <= Playablecharacter.y)) {
+        ememyOne.follow(Playablecharacter, 20)
     }
 }
 sprites.onOverlap(SpriteKind.Player, SpriteKind.building, function (sprite, otherSprite) {
@@ -198,7 +203,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.hole, function (sprite, otherSpr
         . . . . . . . . . . . . . . . . 
         . . . . . . . . . . . . . . . . 
         `)
-    ememies.destroy()
+    ememyOne.destroy()
     randomPlants = sprites.create(plants[randint(0, plants.length - 1)], SpriteKind.building)
     for (let index = 0; index < 8; index++) {
         randomPlants.setPosition(randint(10, 160), randint(10, 120))
@@ -363,7 +368,7 @@ controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
     )
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
-    ememies.destroy()
+    ememyOne.destroy()
 })
 let playableCharacterProjectile: Sprite = null
 let randomPlants: Sprite = null
@@ -371,7 +376,7 @@ let facingDown = false
 let facingLeft = false
 let facingRight = false
 let facingUp = false
-let ememies: Sprite = null
+let ememyOne: Sprite = null
 let Playablecharacter: Sprite = null
 let plants: Image[] = []
 let hole: Sprite = null
@@ -422,14 +427,14 @@ Playablecharacter.say("Oh great, I'm trapped", 3500)
 scene.cameraFollowSprite(Playablecharacter)
 Playablecharacter.setPosition(randint(27, 98), randint(24, 90))
 Playablecharacter.setStayInScreen(true)
-ememies = sprites.create(sprites.builtin.forestSnake0, SpriteKind.Enemy)
-if (!(ememies.overlapsWith(Playablecharacter))) {
+ememyOne = sprites.create(sprites.builtin.forestSnake0, SpriteKind.Enemy)
+if (!(ememyOne.overlapsWith(Playablecharacter))) {
 	
 } else {
-    ememies.setPosition(randint(27, 98), randint(24, 90))
+    ememyOne.setPosition(randint(27, 98), randint(24, 90))
 }
 animation.runImageAnimation(
-ememies,
+ememyOne,
 [img`
     . . . . c c c c c c . . . . . . 
     . . . c 6 7 7 7 7 6 c . . . . . 
@@ -877,33 +882,33 @@ forever(function () {
 })
 forever(function () {
     enemyAwareness()
-    if (ememies.overlapsWith(Playablecharacter) && facingDown) {
+    if (ememyOne.overlapsWith(Playablecharacter) && facingDown) {
         Playablecharacter.y += -13
         pause(50)
         Playablecharacter.y += 2
-        ememies.follow(Playablecharacter, 0)
+        ememyOne.follow(Playablecharacter, 0)
         pause(500)
-        ememies.follow(Playablecharacter, 20)
-    } else if (ememies.overlapsWith(Playablecharacter) && facingLeft) {
+        ememyOne.follow(Playablecharacter, 20)
+    } else if (ememyOne.overlapsWith(Playablecharacter) && facingLeft) {
         Playablecharacter.x += 13
         pause(50)
         Playablecharacter.x += -2
-        ememies.follow(Playablecharacter, 0)
+        ememyOne.follow(Playablecharacter, 0)
         pause(500)
-        ememies.follow(Playablecharacter, 20)
-    } else if (ememies.overlapsWith(Playablecharacter) && facingRight) {
+        ememyOne.follow(Playablecharacter, 20)
+    } else if (ememyOne.overlapsWith(Playablecharacter) && facingRight) {
         Playablecharacter.x += -13
         pause(50)
         Playablecharacter.x += 2
-        ememies.follow(Playablecharacter, 0)
+        ememyOne.follow(Playablecharacter, 0)
         pause(500)
-        ememies.follow(Playablecharacter, 20)
-    } else if (ememies.overlapsWith(Playablecharacter) && facingUp) {
+        ememyOne.follow(Playablecharacter, 20)
+    } else if (ememyOne.overlapsWith(Playablecharacter) && facingUp) {
         Playablecharacter.y += 13
         pause(50)
         Playablecharacter.y += -2
-        ememies.follow(Playablecharacter, 0)
+        ememyOne.follow(Playablecharacter, 0)
         pause(500)
-        ememies.follow(Playablecharacter, 20)
+        ememyOne.follow(Playablecharacter, 20)
     }
 })

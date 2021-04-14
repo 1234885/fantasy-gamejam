@@ -2,7 +2,8 @@
     "name": "Fantasy Gamejam",
     "description": "",
     "dependencies": {
-        "device": "*"
+        "device": "*",
+        "animation": "*"
     },
     "files": [
         "main.blocks",
