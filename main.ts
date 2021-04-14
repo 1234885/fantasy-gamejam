@@ -1,3 +1,7 @@
+namespace SpriteKind {
+    export const building = SpriteKind.create()
+    export const hole = SpriteKind.create()
+}
 controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
     facingUp = true
     facingRight = false
@@ -78,6 +82,25 @@ controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
     true
     )
 })
+sprites.onOverlap(SpriteKind.Player, SpriteKind.building, function (sprite, otherSprite) {
+    if (facingDown) {
+        Playablecharacter.y += -13
+        pause(100)
+        Playablecharacter.y += 2
+    } else if (facingLeft) {
+        Playablecharacter.x += 13
+        pause(100)
+        Playablecharacter.x += -2
+    } else if (facingRight) {
+        Playablecharacter.x += -13
+        pause(100)
+        Playablecharacter.x += 2
+    } else if (facingUp) {
+        Playablecharacter.y += 13
+        pause(100)
+        Playablecharacter.y += -2
+    }
+})
 controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
     facingRight = false
     facingLeft = true
@@ -156,6 +179,32 @@ controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
     100,
     true
     )
+})
+sprites.onOverlap(SpriteKind.Player, SpriteKind.hole, function (sprite, otherSprite) {
+    tiles.setTilemap(tilemap`level4`)
+    hole.setImage(img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `)
+    ememies.destroy()
+    for (let index = 0; index < 4; index++) {
+        randomPlants = sprites.create(plants[randint(0, plants.length - 1)], SpriteKind.building)
+        randomPlants.setPosition(randint(0, 10), randint(0, 10))
+    }
 })
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
     facingLeft = false
@@ -338,17 +387,40 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSp
     }
 })
 let playableCharacterProjectile: Sprite = null
+let randomPlants: Sprite = null
 let facingDown = false
 let facingLeft = false
 let facingRight = false
 let facingUp = false
 let ememies: Sprite = null
 let Playablecharacter: Sprite = null
+let plants: Image[] = []
+let hole: Sprite = null
 game.splash("Kill The Monsters!")
 info.setLife(3)
 let timebetweenpresses = 850
 let lastpressed = 0
 tiles.setTilemap(tilemap`level2`)
+hole = sprites.create(img`
+    .........................
+    .........bbbb............
+    .........bfffbbbbbb......
+    ........bffffffffffb.....
+    ........bfffffffffffb....
+    .....bbbfffffffffffffbb..
+    ....bffffffffffffffffffb.
+    ....bfffffffffffffffffffb
+    ....bfffffffffffffffffffb
+    .....bffffffffffffffffffb
+    .....bffffffffffffffffffb
+    ......bfffffffffffffffffb
+    .......bffffffffffffffffb
+    ........bbffffffffffffffb
+    ..........bffffffffffbbb.
+    ...........bbbbbbbbbb....
+    `, SpriteKind.hole)
+hole.setPosition(25, 210)
+plants = [sprites.duck.tree, sprites.castle.saplingOak, sprites.castle.shrub]
 Playablecharacter = sprites.create(img`
     . . . . . . f f f f . . . . . . 
     . . . . f f f 2 2 f f f . . . . 
@@ -807,18 +879,16 @@ forever(function () {
         false
         )
         playableCharacterProjectile = sprites.createProjectileFromSprite(img`
-            . . 5 . 5 . 
-            4 . 4 5 . . 
-            . 5 5 5 . 4 
-            4 4 . 2 5 . 
-            . . 4 . 2 . 
-            . . 5 4 . 2 
-            . 4 . 4 . . 
-            4 . 5 2 5 . 
-            . 5 4 2 . 2 
-            . 2 2 5 2 . 
-            2 . 2 . 5 . 
-            . 2 . 5 2 2 
+            . . . . . . . . . . . . . . 
+            4 . . . . . . . . . . . . . 
+            . 5 . . . . . . . . . . . . 
+            . 4 . 2 . . . . . . . . . 5 
+            . . . . 2 . . . . . . 4 5 . 
+            . . 5 4 . 4 . . . . 5 . . 2 
+            . 4 . . 5 . 5 . . 5 . 2 . 5 
+            . . 5 . 4 . 4 . 4 2 . . . . 
+            . . . 2 . 4 . 5 . 5 . 4 5 . 
+            . . . . 2 . 4 4 . 2 5 . . . 
             `, Playablecharacter, 0, 0)
         playableCharacterProjectile.setPosition(playableCharacterProjectile.x, playableCharacterProjectile.y + 15)
         playableCharacterProjectile.lifespan = 100
