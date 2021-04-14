@@ -82,23 +82,20 @@ controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
     true
     )
 })
+function enemyAwareness () {
+    if ((ememies.x + 20 >= Playablecharacter.x || ememies.x - 20 <= Playablecharacter.x) && (ememies.y + 20 >= Playablecharacter.y || ememies.y - 20 <= Playablecharacter.y)) {
+        ememies.follow(Playablecharacter, 20)
+    }
+}
 sprites.onOverlap(SpriteKind.Player, SpriteKind.building, function (sprite, otherSprite) {
     if (facingDown) {
-        Playablecharacter.y += -13
-        pause(100)
-        Playablecharacter.y += 2
+        Playablecharacter.y += -5
     } else if (facingLeft) {
-        Playablecharacter.x += 13
-        pause(100)
-        Playablecharacter.x += -2
+        Playablecharacter.x += 5
     } else if (facingRight) {
-        Playablecharacter.x += -13
-        pause(100)
-        Playablecharacter.x += 2
+        Playablecharacter.x += -5
     } else if (facingUp) {
-        Playablecharacter.y += 13
-        pause(100)
-        Playablecharacter.y += -2
+        Playablecharacter.y += 5
     }
 })
 controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
@@ -182,6 +179,7 @@ controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.hole, function (sprite, otherSprite) {
     tiles.setTilemap(tilemap`level4`)
+    scene.setBackgroundColor(7)
     hole.setImage(img`
         . . . . . . . . . . . . . . . . 
         . . . . . . . . . . . . . . . . 
@@ -201,9 +199,9 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.hole, function (sprite, otherSpr
         . . . . . . . . . . . . . . . . 
         `)
     ememies.destroy()
-    for (let index = 0; index < 4; index++) {
-        randomPlants = sprites.create(plants[randint(0, plants.length - 1)], SpriteKind.building)
-        randomPlants.setPosition(randint(0, 10), randint(0, 10))
+    randomPlants = sprites.create(plants[randint(0, plants.length - 1)], SpriteKind.building)
+    for (let index = 0; index < 8; index++) {
+        randomPlants.setPosition(randint(10, 160), randint(10, 120))
     }
 })
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
@@ -367,25 +365,6 @@ controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
     ememies.destroy()
 })
-sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
-    if (facingDown) {
-        Playablecharacter.y += -13
-        pause(100)
-        Playablecharacter.y += 2
-    } else if (facingLeft) {
-        Playablecharacter.x += 13
-        pause(100)
-        Playablecharacter.x += -2
-    } else if (facingRight) {
-        Playablecharacter.x += -13
-        pause(100)
-        Playablecharacter.x += 2
-    } else if (facingUp) {
-        Playablecharacter.y += 13
-        pause(100)
-        Playablecharacter.y += -2
-    }
-})
 let playableCharacterProjectile: Sprite = null
 let randomPlants: Sprite = null
 let facingDown = false
@@ -439,11 +418,14 @@ Playablecharacter = sprites.create(img`
     . . . . . f f f f f f . . . . . 
     . . . . . f f . . f f . . . . . 
     `, SpriteKind.Player)
+Playablecharacter.say("Oh great, I'm trapped", 3500)
 scene.cameraFollowSprite(Playablecharacter)
 Playablecharacter.setPosition(randint(27, 98), randint(24, 90))
 Playablecharacter.setStayInScreen(true)
 ememies = sprites.create(sprites.builtin.forestSnake0, SpriteKind.Enemy)
 if (!(ememies.overlapsWith(Playablecharacter))) {
+	
+} else {
     ememies.setPosition(randint(27, 98), randint(24, 90))
 }
 animation.runImageAnimation(
@@ -486,9 +468,6 @@ ememies,
 500,
 true
 )
-if (ememies.x + 10 <= Playablecharacter.x && ememies.y + 10 <= Playablecharacter.x) {
-    ememies.follow(Playablecharacter, 20)
-}
 game.onUpdate(function () {
     Playablecharacter.y += controller.dy(70)
 })
@@ -894,5 +873,37 @@ forever(function () {
         playableCharacterProjectile.lifespan = 100
         music.knock.play()
         lastpressed = game.runtime()
+    }
+})
+forever(function () {
+    enemyAwareness()
+    if (ememies.overlapsWith(Playablecharacter) && facingDown) {
+        Playablecharacter.y += -13
+        pause(50)
+        Playablecharacter.y += 2
+        ememies.follow(Playablecharacter, 0)
+        pause(500)
+        ememies.follow(Playablecharacter, 20)
+    } else if (ememies.overlapsWith(Playablecharacter) && facingLeft) {
+        Playablecharacter.x += 13
+        pause(50)
+        Playablecharacter.x += -2
+        ememies.follow(Playablecharacter, 0)
+        pause(500)
+        ememies.follow(Playablecharacter, 20)
+    } else if (ememies.overlapsWith(Playablecharacter) && facingRight) {
+        Playablecharacter.x += -13
+        pause(50)
+        Playablecharacter.x += 2
+        ememies.follow(Playablecharacter, 0)
+        pause(500)
+        ememies.follow(Playablecharacter, 20)
+    } else if (ememies.overlapsWith(Playablecharacter) && facingUp) {
+        Playablecharacter.y += 13
+        pause(50)
+        Playablecharacter.y += -2
+        ememies.follow(Playablecharacter, 0)
+        pause(500)
+        ememies.follow(Playablecharacter, 20)
     }
 })
