@@ -368,7 +368,16 @@ controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
     )
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
-    ememyOne.destroy()
+    enemyHitpoints += -1
+    if (enemyHitpoints == 0) {
+        ememyOne.destroy()
+    }
+})
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
+    info.changeLifeBy(-1)
+    if (ememyOne.ax > 0 && ememyOne.ay > 0) {
+    	
+    }
 })
 let playableCharacterProjectile: Sprite = null
 let randomPlants: Sprite = null
@@ -380,8 +389,10 @@ let ememyOne: Sprite = null
 let Playablecharacter: Sprite = null
 let plants: Image[] = []
 let hole: Sprite = null
+let enemyHitpoints = 0
 game.splash("Kill The Monsters!")
 info.setLife(3)
+enemyHitpoints = 3
 let timebetweenpresses = 850
 let lastpressed = 0
 tiles.setTilemap(tilemap`level2`)
@@ -404,6 +415,7 @@ hole = sprites.create(img`
     ...........bbbbbbbbbb....
     `, SpriteKind.hole)
 hole.setPosition(25, 210)
+plants = [sprites.duck.tree, sprites.castle.saplingOak, sprites.castle.shrub]
 plants = [sprites.duck.tree, sprites.castle.saplingOak, sprites.castle.shrub]
 Playablecharacter = sprites.create(img`
     . . . . . . f f f f . . . . . . 
