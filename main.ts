@@ -203,11 +203,14 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.hole, function (sprite, otherSpr
         . . . . . . . . . . . . . . . . 
         . . . . . . . . . . . . . . . . 
         `)
-    ememyOne.destroy()
+    ememyOne.destroy(effects.disintegrate, 250)
     randomPlants = sprites.create(plants[randint(0, plants.length - 1)], SpriteKind.building)
     for (let index = 0; index < 8; index++) {
         randomPlants.setPosition(randint(10, 160), randint(10, 120))
     }
+})
+statusbars.onZero(StatusBarKind.Health, function (status) {
+    game.over(false, effects.dissolve)
 })
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
     facingLeft = false
@@ -369,14 +372,10 @@ controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
     enemyHitpoints += -1
+    info.changeScoreBy(1)
+    pause(200)
     if (enemyHitpoints == 0) {
-        ememyOne.destroy()
-    }
-})
-sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
-    info.changeLifeBy(-1)
-    if (ememyOne.ax > 0 && ememyOne.ay > 0) {
-    	
+        ememyOne.destroy(effects.disintegrate, 250)
     }
 })
 let playableCharacterProjectile: Sprite = null
@@ -391,7 +390,11 @@ let plants: Image[] = []
 let hole: Sprite = null
 let enemyHitpoints = 0
 game.splash("Kill The Monsters!")
-info.setLife(3)
+let statusbar = statusbars.create(85, 6, StatusBarKind.Health)
+statusbar.setBarBorder(1, 15)
+statusbar.positionDirection(CollisionDirection.Top)
+let movementBuff = 0
+info.setScore(0)
 enemyHitpoints = 3
 let timebetweenpresses = 850
 let lastpressed = 0
@@ -415,7 +418,6 @@ hole = sprites.create(img`
     ...........bbbbbbbbbb....
     `, SpriteKind.hole)
 hole.setPosition(25, 210)
-plants = [sprites.duck.tree, sprites.castle.saplingOak, sprites.castle.shrub]
 plants = [sprites.duck.tree, sprites.castle.saplingOak, sprites.castle.shrub]
 Playablecharacter = sprites.create(img`
     . . . . . . f f f f . . . . . . 
@@ -485,11 +487,8 @@ ememyOne,
 500,
 true
 )
-game.onUpdate(function () {
-    Playablecharacter.y += controller.dy(70)
-})
-game.onUpdate(function () {
-    Playablecharacter.x += controller.dx(70)
+forever(function () {
+    controller.moveSprite(Playablecharacter, movementBuff, movementBuff)
 })
 forever(function () {
     if (controller.A.isPressed() && facingRight == true && game.runtime() - lastpressed >= timebetweenpresses) {
@@ -895,30 +894,38 @@ forever(function () {
 forever(function () {
     enemyAwareness()
     if (ememyOne.overlapsWith(Playablecharacter) && facingDown) {
+        statusbar.value += -33
+        movementBuff += 33
         Playablecharacter.y += -13
         pause(50)
-        Playablecharacter.y += 2
+        Playablecharacter.y += 0
         ememyOne.follow(Playablecharacter, 0)
         pause(500)
         ememyOne.follow(Playablecharacter, 20)
     } else if (ememyOne.overlapsWith(Playablecharacter) && facingLeft) {
+        statusbar.value += -33
+        movementBuff += 33
         Playablecharacter.x += 13
         pause(50)
-        Playablecharacter.x += -2
+        Playablecharacter.x += 0
         ememyOne.follow(Playablecharacter, 0)
         pause(500)
         ememyOne.follow(Playablecharacter, 20)
     } else if (ememyOne.overlapsWith(Playablecharacter) && facingRight) {
+        statusbar.value += -33
+        movementBuff += 33
         Playablecharacter.x += -13
         pause(50)
-        Playablecharacter.x += 2
+        Playablecharacter.x += 0
         ememyOne.follow(Playablecharacter, 0)
         pause(500)
         ememyOne.follow(Playablecharacter, 20)
     } else if (ememyOne.overlapsWith(Playablecharacter) && facingUp) {
+        statusbar.value += -33
+        movementBuff += 33
         Playablecharacter.y += 13
         pause(50)
-        Playablecharacter.y += -2
+        Playablecharacter.y += 0
         ememyOne.follow(Playablecharacter, 0)
         pause(500)
         ememyOne.follow(Playablecharacter, 20)
