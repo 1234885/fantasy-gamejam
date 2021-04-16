@@ -87,9 +87,9 @@ controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
     true
     )
 })
-function enemyAwareness () {
-    if ((ememyOne.x + 20 >= Playablecharacter.x || ememyOne.x - 20 <= Playablecharacter.x) && (ememyOne.y + 20 >= Playablecharacter.y || ememyOne.y - 20 <= Playablecharacter.y)) {
-        ememyOne.follow(Playablecharacter, 20)
+function enemyAwarenessTwo (snake: Sprite) {
+    if (snake.x + 13 >= Playablecharacter.x && snake.x - 13 <= Playablecharacter.x || snake.y + 13 >= Playablecharacter.y && snake.y - 13 <= Playablecharacter.y) {
+        snake.follow(Playablecharacter, 20)
     }
 }
 sprites.onOverlap(SpriteKind.Player, SpriteKind.building, function (sprite, otherSprite) {
@@ -378,6 +378,53 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, oth
         ememyOne.destroy(effects.disintegrate, 250)
     }
 })
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
+    if ((Playablecharacter && facingDown) == true) {
+        statusbar.value += -33
+        if (movementBuff < 130) {
+            movementBuff += 20
+        }
+        Playablecharacter.y += -13
+        pause(50)
+        Playablecharacter.y += 0
+        ememyOne.follow(Playablecharacter, 0)
+        pause(500)
+        ememyOne.follow(Playablecharacter, 20)
+    } else if ((Playablecharacter && facingLeft) == true) {
+        statusbar.value += -33
+        if (movementBuff < 130) {
+            movementBuff += 20
+        }
+        Playablecharacter.x += 13
+        pause(50)
+        Playablecharacter.x += 0
+        ememyOne.follow(Playablecharacter, 0)
+        pause(500)
+        ememyOne.follow(Playablecharacter, 20)
+    } else if (ememyOne.overlapsWith(Playablecharacter) && facingRight) {
+        statusbar.value += -33
+        if (movementBuff < 130) {
+            movementBuff += 20
+        }
+        Playablecharacter.x += -13
+        pause(50)
+        Playablecharacter.x += 0
+        ememyOne.follow(Playablecharacter, 0)
+        pause(500)
+        ememyOne.follow(Playablecharacter, 20)
+    } else if ((Playablecharacter && facingUp) == true) {
+        statusbar.value += -33
+        if (movementBuff < 130) {
+            movementBuff += 20
+        }
+        Playablecharacter.y += 13
+        pause(50)
+        Playablecharacter.y += 0
+        ememyOne.follow(Playablecharacter, 0)
+        pause(500)
+        ememyOne.follow(Playablecharacter, 20)
+    }
+})
 let playableCharacterProjectile: Sprite = null
 let randomPlants: Sprite = null
 let facingDown = false
@@ -389,14 +436,16 @@ let Playablecharacter: Sprite = null
 let plants: Image[] = []
 let hole: Sprite = null
 let enemyHitpoints = 0
+let movementBuff = 0
+let statusbar: StatusBarSprite = null
 game.splash("Kill The Monsters!")
-let statusbar = statusbars.create(85, 6, StatusBarKind.Health)
+statusbar = statusbars.create(85, 6, StatusBarKind.Health)
 statusbar.setBarBorder(1, 15)
 statusbar.positionDirection(CollisionDirection.Top)
-let movementBuff = 0
+movementBuff = 70
 info.setScore(0)
 enemyHitpoints = 3
-let timebetweenpresses = 850
+let timebetweenpresses = 500
 let lastpressed = 0
 tiles.setTilemap(tilemap`level2`)
 hole = sprites.create(img`
@@ -442,11 +491,14 @@ scene.cameraFollowSprite(Playablecharacter)
 Playablecharacter.setPosition(randint(27, 98), randint(24, 90))
 Playablecharacter.setStayInScreen(true)
 ememyOne = sprites.create(sprites.builtin.forestSnake0, SpriteKind.Enemy)
-if (!(ememyOne.overlapsWith(Playablecharacter))) {
-	
-} else {
-    ememyOne.setPosition(randint(27, 98), randint(24, 90))
-}
+let enemyTwo = sprites.create(sprites.builtin.forestSnake0, SpriteKind.Enemy)
+let enemyThree = sprites.create(sprites.builtin.forestSnake0, SpriteKind.Enemy)
+let enemyFour = sprites.create(sprites.builtin.forestSnake0, SpriteKind.Enemy)
+let list = [ememyOne, enemyTwo, enemyThree, enemyFour]
+ememyOne.setPosition(randint(27, 98), randint(24, 90))
+enemyTwo.setPosition(256, 48)
+enemyThree.setPosition(81, 81)
+enemyFour.setPosition(0, 36)
 animation.runImageAnimation(
 ememyOne,
 [img`
@@ -892,42 +944,47 @@ forever(function () {
     }
 })
 forever(function () {
-    enemyAwareness()
-    if (ememyOne.overlapsWith(Playablecharacter) && facingDown) {
-        statusbar.value += -33
-        movementBuff += 33
-        Playablecharacter.y += -13
-        pause(50)
-        Playablecharacter.y += 0
-        ememyOne.follow(Playablecharacter, 0)
-        pause(500)
-        ememyOne.follow(Playablecharacter, 20)
-    } else if (ememyOne.overlapsWith(Playablecharacter) && facingLeft) {
-        statusbar.value += -33
-        movementBuff += 33
-        Playablecharacter.x += 13
-        pause(50)
-        Playablecharacter.x += 0
-        ememyOne.follow(Playablecharacter, 0)
-        pause(500)
-        ememyOne.follow(Playablecharacter, 20)
-    } else if (ememyOne.overlapsWith(Playablecharacter) && facingRight) {
-        statusbar.value += -33
-        movementBuff += 33
-        Playablecharacter.x += -13
-        pause(50)
-        Playablecharacter.x += 0
-        ememyOne.follow(Playablecharacter, 0)
-        pause(500)
-        ememyOne.follow(Playablecharacter, 20)
-    } else if (ememyOne.overlapsWith(Playablecharacter) && facingUp) {
-        statusbar.value += -33
-        movementBuff += 33
-        Playablecharacter.y += 13
-        pause(50)
-        Playablecharacter.y += 0
-        ememyOne.follow(Playablecharacter, 0)
-        pause(500)
-        ememyOne.follow(Playablecharacter, 20)
+    for (let value of list) {
+        enemyAwarenessTwo(value)
+        animation.runImageAnimation(
+        value,
+        [img`
+            . . . . c c c c c c . . . . . . 
+            . . . c 6 7 7 7 7 6 c . . . . . 
+            . . c 7 7 7 7 7 7 7 7 c . . . . 
+            . c 6 7 7 7 7 7 7 7 7 6 c . . . 
+            . c 7 c 6 6 6 6 c 7 7 7 c . . . 
+            . f 7 6 f 6 6 f 6 7 7 7 f . . . 
+            . f 7 7 7 7 7 7 7 7 7 7 f . . . 
+            . . f 7 7 7 7 6 c 7 7 6 f c . . 
+            . . . f c c c c 7 7 6 f 7 7 c . 
+            . . c 7 2 7 7 7 6 c f 7 7 7 7 c 
+            . c 7 7 2 7 7 c f c 6 7 7 6 c c 
+            c 1 1 1 1 7 6 f c c 6 6 6 c . . 
+            f 1 1 1 1 1 6 6 c 6 6 6 6 f . . 
+            f 6 1 1 1 1 1 6 6 6 6 6 c f . . 
+            . f 6 1 1 1 1 1 1 6 6 6 f . . . 
+            . . c c c c c c c c c f . . . . 
+            `,img`
+            . . . c c c c c c . . . . . . . 
+            . . c 6 7 7 7 7 6 c . . . . . . 
+            . c 7 7 7 7 7 7 7 7 c . . . . . 
+            c 6 7 7 7 7 7 7 7 7 6 c . . . . 
+            c 7 c 6 6 6 6 c 7 7 7 c . . . . 
+            f 7 6 f 6 6 f 6 7 7 7 f . . . . 
+            f 7 7 7 7 7 7 7 7 7 7 f . . . . 
+            . f 7 7 7 7 6 c 7 7 6 f . . . . 
+            . . f c c c c 7 7 6 f c c c . . 
+            . . c 6 2 7 7 7 f c c 7 7 7 c . 
+            . c 6 7 7 2 7 7 c f 6 7 7 7 7 c 
+            . c 1 1 1 1 7 6 6 c 6 6 6 c c c 
+            . c 1 1 1 1 1 6 6 6 6 6 6 c . . 
+            . c 6 1 1 1 1 1 6 6 6 6 6 c . . 
+            . . c 6 1 1 1 1 1 7 6 6 c c . . 
+            . . . c c c c c c c c c c . . . 
+            `],
+        500,
+        true
+        )
     }
 })
