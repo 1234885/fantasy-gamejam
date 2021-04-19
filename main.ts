@@ -88,7 +88,7 @@ controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
     )
 })
 function enemyAwarenessTwo (snake: Sprite) {
-    if (snake.x + 13 >= Playablecharacter.x && snake.x - 13 <= Playablecharacter.x || snake.y + 13 >= Playablecharacter.y && snake.y - 13 <= Playablecharacter.y) {
+    if (snake.x + 10 >= Playablecharacter.x && snake.x - 10 <= Playablecharacter.x || snake.y + 10 >= Playablecharacter.y && snake.y - 10 <= Playablecharacter.y) {
         snake.follow(Playablecharacter, 20)
     }
 }
@@ -371,11 +371,27 @@ controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
     )
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
-    enemyHitpoints += -1
-    info.changeScoreBy(1)
-    pause(200)
-    if (enemyHitpoints == 0) {
+    if (playableCharacterProjectile.overlapsWith(ememyOne)) {
+        enemyOneHitpoints += -1
+        info.changeScoreBy(1)
+    } else if (playableCharacterProjectile.overlapsWith(enemyTwo)) {
+        enemyTwoHitpoints += -1
+        info.changeScoreBy(1)
+    } else if (playableCharacterProjectile.overlapsWith(enemyThree)) {
+        enemyThreeHitpoints += -1
+        info.changeScoreBy(1)
+    } else if (playableCharacterProjectile.overlapsWith(enemyFour)) {
+        enemyFourHitpoints += -1
+        info.changeScoreBy(1)
+    }
+    if (enemyOneHitpoints == 0) {
         ememyOne.destroy(effects.disintegrate, 250)
+    } else if (enemyTwoHitpoints == 0) {
+        enemyTwo.destroy(effects.disintegrate, 250)
+    } else if (enemyThreeHitpoints == 0) {
+        enemyThree.destroy(effects.disintegrate, 250)
+    } else if (enemyFourHitpoints == 0) {
+        enemyFour.destroy(effects.disintegrate, 250)
     }
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
@@ -431,11 +447,17 @@ let facingDown = false
 let facingLeft = false
 let facingRight = false
 let facingUp = false
+let enemyFourHitpoints = 0
+let enemyFour: Sprite = null
+let enemyThreeHitpoints = 0
+let enemyThree: Sprite = null
+let enemyTwoHitpoints = 0
+let enemyTwo: Sprite = null
+let enemyOneHitpoints = 0
 let ememyOne: Sprite = null
 let Playablecharacter: Sprite = null
 let plants: Image[] = []
 let hole: Sprite = null
-let enemyHitpoints = 0
 let movementBuff = 0
 let statusbar: StatusBarSprite = null
 game.splash("Kill The Monsters!")
@@ -444,7 +466,6 @@ statusbar.setBarBorder(1, 15)
 statusbar.positionDirection(CollisionDirection.Top)
 movementBuff = 70
 info.setScore(0)
-enemyHitpoints = 3
 let timebetweenpresses = 500
 let lastpressed = 0
 tiles.setTilemap(tilemap`level2`)
@@ -491,9 +512,13 @@ scene.cameraFollowSprite(Playablecharacter)
 Playablecharacter.setPosition(randint(27, 98), randint(24, 90))
 Playablecharacter.setStayInScreen(true)
 ememyOne = sprites.create(sprites.builtin.forestSnake0, SpriteKind.Enemy)
-let enemyTwo = sprites.create(sprites.builtin.forestSnake0, SpriteKind.Enemy)
-let enemyThree = sprites.create(sprites.builtin.forestSnake0, SpriteKind.Enemy)
-let enemyFour = sprites.create(sprites.builtin.forestSnake0, SpriteKind.Enemy)
+enemyOneHitpoints = 3
+enemyTwo = sprites.create(sprites.builtin.forestSnake0, SpriteKind.Enemy)
+enemyTwoHitpoints = 3
+enemyThree = sprites.create(sprites.builtin.forestSnake0, SpriteKind.Enemy)
+enemyThreeHitpoints = 3
+enemyFour = sprites.create(sprites.builtin.forestSnake0, SpriteKind.Enemy)
+enemyFourHitpoints = 3
 let list = [ememyOne, enemyTwo, enemyThree, enemyFour]
 ememyOne.setPosition(randint(27, 98), randint(24, 90))
 enemyTwo.setPosition(256, 48)
@@ -987,4 +1012,7 @@ forever(function () {
         true
         )
     }
+})
+forever(function () {
+	
 })
