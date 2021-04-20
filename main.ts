@@ -204,6 +204,9 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.hole, function (sprite, otherSpr
         . . . . . . . . . . . . . . . . 
         `)
     ememyOne.destroy(effects.disintegrate, 250)
+    enemyTwo.destroy(effects.disintegrate, 250)
+    enemyThree.destroy(effects.disintegrate, 250)
+    enemyFour.destroy(effects.disintegrate, 250)
     randomPlants = sprites.create(plants[randint(0, plants.length - 1)], SpriteKind.building)
     for (let index = 0; index < 8; index++) {
         randomPlants.setPosition(randint(10, 160), randint(10, 120))
@@ -372,31 +375,35 @@ controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
     if (playableCharacterProjectile.overlapsWith(ememyOne)) {
-        enemyOneHitpoints += -1
+        enemystatusbar.value += -33.3
         info.changeScoreBy(1)
+        pause(200)
     } else if (playableCharacterProjectile.overlapsWith(enemyTwo)) {
-        enemyTwoHitpoints += -1
+        enemystatusbar2.value += -33.3
         info.changeScoreBy(1)
+        pause(200)
     } else if (playableCharacterProjectile.overlapsWith(enemyThree)) {
-        enemyThreeHitpoints += -1
+        enemystatusbar3.value += -33.3
         info.changeScoreBy(1)
+        pause(200)
     } else if (playableCharacterProjectile.overlapsWith(enemyFour)) {
-        enemyFourHitpoints += -1
+        enemystatusbar4.value += -33.3
         info.changeScoreBy(1)
+        pause(200)
     }
-    if (enemyOneHitpoints == 0) {
+    if (enemystatusbar.value == 0) {
         ememyOne.destroy(effects.disintegrate, 250)
-    } else if (enemyTwoHitpoints == 0) {
+    } else if (enemystatusbar2.value == 0) {
         enemyTwo.destroy(effects.disintegrate, 250)
-    } else if (enemyThreeHitpoints == 0) {
+    } else if (enemystatusbar3.value == 0) {
         enemyThree.destroy(effects.disintegrate, 250)
-    } else if (enemyFourHitpoints == 0) {
+    } else if (enemystatusbar4.value == 0) {
         enemyFour.destroy(effects.disintegrate, 250)
     }
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
     if ((Playablecharacter && facingDown) == true) {
-        statusbar.value += -33
+        statusbar.value += -20
         if (movementBuff < 130) {
             movementBuff += 20
         }
@@ -407,7 +414,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSp
         pause(500)
         ememyOne.follow(Playablecharacter, 20)
     } else if ((Playablecharacter && facingLeft) == true) {
-        statusbar.value += -33
+        statusbar.value += -20
         if (movementBuff < 130) {
             movementBuff += 20
         }
@@ -418,7 +425,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSp
         pause(500)
         ememyOne.follow(Playablecharacter, 20)
     } else if (ememyOne.overlapsWith(Playablecharacter) && facingRight) {
-        statusbar.value += -33
+        statusbar.value += -20
         if (movementBuff < 130) {
             movementBuff += 20
         }
@@ -429,7 +436,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSp
         pause(500)
         ememyOne.follow(Playablecharacter, 20)
     } else if ((Playablecharacter && facingUp) == true) {
-        statusbar.value += -33
+        statusbar.value += -20
         if (movementBuff < 130) {
             movementBuff += 20
         }
@@ -447,13 +454,13 @@ let facingDown = false
 let facingLeft = false
 let facingRight = false
 let facingUp = false
-let enemyFourHitpoints = 0
+let enemystatusbar4: StatusBarSprite = null
 let enemyFour: Sprite = null
-let enemyThreeHitpoints = 0
+let enemystatusbar3: StatusBarSprite = null
 let enemyThree: Sprite = null
-let enemyTwoHitpoints = 0
+let enemystatusbar2: StatusBarSprite = null
 let enemyTwo: Sprite = null
-let enemyOneHitpoints = 0
+let enemystatusbar: StatusBarSprite = null
 let ememyOne: Sprite = null
 let Playablecharacter: Sprite = null
 let plants: Image[] = []
@@ -462,8 +469,10 @@ let movementBuff = 0
 let statusbar: StatusBarSprite = null
 game.splash("Kill The Monsters!")
 statusbar = statusbars.create(85, 6, StatusBarKind.Health)
+statusbar.setLabel("HP", 15)
 statusbar.setBarBorder(1, 15)
 statusbar.positionDirection(CollisionDirection.Top)
+statusbar.setStatusBarFlag(StatusBarFlag.SmoothTransition, true)
 movementBuff = 70
 info.setScore(0)
 let timebetweenpresses = 500
@@ -512,58 +521,30 @@ scene.cameraFollowSprite(Playablecharacter)
 Playablecharacter.setPosition(randint(27, 98), randint(24, 90))
 Playablecharacter.setStayInScreen(true)
 ememyOne = sprites.create(sprites.builtin.forestSnake0, SpriteKind.Enemy)
-enemyOneHitpoints = 3
+enemystatusbar = statusbars.create(20, 4, StatusBarKind.EnemyHealth)
+enemystatusbar.value = 100
+enemystatusbar.attachToSprite(ememyOne)
+enemystatusbar.setBarBorder(1, 15)
 enemyTwo = sprites.create(sprites.builtin.forestSnake0, SpriteKind.Enemy)
-enemyTwoHitpoints = 3
+enemystatusbar2 = statusbars.create(20, 4, StatusBarKind.EnemyHealth)
+enemystatusbar2.attachToSprite(enemyTwo)
+enemystatusbar2.value = 100
+enemystatusbar2.setBarBorder(1, 15)
 enemyThree = sprites.create(sprites.builtin.forestSnake0, SpriteKind.Enemy)
-enemyThreeHitpoints = 3
+enemystatusbar3 = statusbars.create(20, 4, StatusBarKind.EnemyHealth)
+enemystatusbar3.attachToSprite(enemyThree)
+enemystatusbar3.value = 100
+enemystatusbar3.setBarBorder(1, 15)
 enemyFour = sprites.create(sprites.builtin.forestSnake0, SpriteKind.Enemy)
-enemyFourHitpoints = 3
+enemystatusbar4 = statusbars.create(20, 4, StatusBarKind.EnemyHealth)
+enemystatusbar4.value = 100
+enemystatusbar4.attachToSprite(enemyFour)
+enemystatusbar4.setBarBorder(1, 15)
 let list = [ememyOne, enemyTwo, enemyThree, enemyFour]
 ememyOne.setPosition(randint(27, 98), randint(24, 90))
 enemyTwo.setPosition(256, 48)
 enemyThree.setPosition(81, 81)
 enemyFour.setPosition(0, 36)
-animation.runImageAnimation(
-ememyOne,
-[img`
-    . . . . c c c c c c . . . . . . 
-    . . . c 6 7 7 7 7 6 c . . . . . 
-    . . c 7 7 7 7 7 7 7 7 c . . . . 
-    . c 6 7 7 7 7 7 7 7 7 6 c . . . 
-    . c 7 c 6 6 6 6 c 7 7 7 c . . . 
-    . f 7 6 f 6 6 f 6 7 7 7 f . . . 
-    . f 7 7 7 7 7 7 7 7 7 7 f . . . 
-    . . f 7 7 7 7 6 c 7 7 6 f c . . 
-    . . . f c c c c 7 7 6 f 7 7 c . 
-    . . c 7 2 7 7 7 6 c f 7 7 7 7 c 
-    . c 7 7 2 7 7 c f c 6 7 7 6 c c 
-    c 1 1 1 1 7 6 f c c 6 6 6 c . . 
-    f 1 1 1 1 1 6 6 c 6 6 6 6 f . . 
-    f 6 1 1 1 1 1 6 6 6 6 6 c f . . 
-    . f 6 1 1 1 1 1 1 6 6 6 f . . . 
-    . . c c c c c c c c c f . . . . 
-    `,img`
-    . . . c c c c c c . . . . . . . 
-    . . c 6 7 7 7 7 6 c . . . . . . 
-    . c 7 7 7 7 7 7 7 7 c . . . . . 
-    c 6 7 7 7 7 7 7 7 7 6 c . . . . 
-    c 7 c 6 6 6 6 c 7 7 7 c . . . . 
-    f 7 6 f 6 6 f 6 7 7 7 f . . . . 
-    f 7 7 7 7 7 7 7 7 7 7 f . . . . 
-    . f 7 7 7 7 6 c 7 7 6 f . . . . 
-    . . f c c c c 7 7 6 f c c c . . 
-    . . c 6 2 7 7 7 f c c 7 7 7 c . 
-    . c 6 7 7 2 7 7 c f 6 7 7 7 7 c 
-    . c 1 1 1 1 7 6 6 c 6 6 6 c c c 
-    . c 1 1 1 1 1 6 6 6 6 6 6 c . . 
-    . c 6 1 1 1 1 1 6 6 6 6 6 c . . 
-    . . c 6 1 1 1 1 1 7 6 6 c c . . 
-    . . . c c c c c c c c c c . . . 
-    `],
-500,
-true
-)
 forever(function () {
     controller.moveSprite(Playablecharacter, movementBuff, movementBuff)
 })
@@ -974,45 +955,110 @@ forever(function () {
         animation.runImageAnimation(
         value,
         [img`
-            . . . . c c c c c c . . . . . . 
-            . . . c 6 7 7 7 7 6 c . . . . . 
-            . . c 7 7 7 7 7 7 7 7 c . . . . 
-            . c 6 7 7 7 7 7 7 7 7 6 c . . . 
-            . c 7 c 6 6 6 6 c 7 7 7 c . . . 
-            . f 7 6 f 6 6 f 6 7 7 7 f . . . 
-            . f 7 7 7 7 7 7 7 7 7 7 f . . . 
-            . . f 7 7 7 7 6 c 7 7 6 f c . . 
-            . . . f c c c c 7 7 6 f 7 7 c . 
-            . . c 7 2 7 7 7 6 c f 7 7 7 7 c 
-            . c 7 7 2 7 7 c f c 6 7 7 6 c c 
-            c 1 1 1 1 7 6 f c c 6 6 6 c . . 
-            f 1 1 1 1 1 6 6 c 6 6 6 6 f . . 
-            f 6 1 1 1 1 1 6 6 6 6 6 c f . . 
-            . f 6 1 1 1 1 1 1 6 6 6 f . . . 
-            . . c c c c c c c c c f . . . . 
+            . . . . . c c c c c c c . . . . 
+            . . . . c 6 7 7 7 7 7 6 c . . . 
+            . . . c 7 c 6 6 6 6 c 7 6 c . . 
+            . . c 6 7 6 f 6 6 f 6 7 7 c . . 
+            . . c 7 7 7 7 7 7 7 7 7 7 c . . 
+            . . f 7 8 1 f f 1 6 7 7 7 f . . 
+            . . f 6 f 1 f f 1 f 7 7 7 f . . 
+            . . . f f 2 2 2 2 f 7 7 6 f . . 
+            . . c c f 2 2 2 2 7 7 6 f c . . 
+            . c 7 7 7 7 7 7 7 7 c c 7 7 c . 
+            c 7 1 1 1 7 7 7 7 f c 6 7 7 7 c 
+            f 1 1 1 1 1 7 6 f c c 6 6 6 c c 
+            f 1 1 1 1 1 1 6 6 c 6 6 6 c . . 
+            f 6 1 1 1 1 1 6 6 6 6 6 6 c . . 
+            . f 6 1 1 1 1 1 6 6 6 6 c . . . 
+            . . f f c c c c c c c c . . . . 
             `,img`
-            . . . c c c c c c . . . . . . . 
-            . . c 6 7 7 7 7 6 c . . . . . . 
-            . c 7 7 7 7 7 7 7 7 c . . . . . 
-            c 6 7 7 7 7 7 7 7 7 6 c . . . . 
-            c 7 c 6 6 6 6 c 7 7 7 c . . . . 
-            f 7 6 f 6 6 f 6 7 7 7 f . . . . 
-            f 7 7 7 7 7 7 7 7 7 7 f . . . . 
-            . f 7 7 7 7 6 c 7 7 6 f . . . . 
-            . . f c c c c 7 7 6 f c c c . . 
-            . . c 6 2 7 7 7 f c c 7 7 7 c . 
-            . c 6 7 7 2 7 7 c f 6 7 7 7 7 c 
-            . c 1 1 1 1 7 6 6 c 6 6 6 c c c 
-            . c 1 1 1 1 1 6 6 6 6 6 6 c . . 
-            . c 6 1 1 1 1 1 6 6 6 6 6 c . . 
-            . . c 6 1 1 1 1 1 7 6 6 c c . . 
-            . . . c c c c c c c c c c . . . 
+            . . . . . . c c c c c c c . . . 
+            . . . . . c f f 6 6 f f 7 c . . 
+            . . . . c 7 6 6 6 6 6 6 7 6 c . 
+            . . . c 7 7 7 7 7 7 7 7 7 7 c . 
+            . . . c 7 8 1 f f 1 6 7 7 7 c . 
+            . . . f 6 f 1 f f 1 f 7 7 7 f . 
+            . . . f 6 f 2 2 2 2 f 7 7 7 f . 
+            . . c c 6 f 2 2 2 2 f 7 7 6 f . 
+            . c 7 7 7 7 2 2 2 2 7 7 f c . . 
+            c 7 1 1 1 7 7 7 7 7 c c 7 7 c . 
+            f 1 1 1 1 1 7 7 7 f c 6 7 7 7 c 
+            f 1 1 1 1 1 1 6 f c c 6 6 6 c c 
+            f 6 1 1 1 1 1 6 6 c 6 6 6 c . . 
+            f 6 1 1 1 1 1 6 6 6 6 6 6 c . . 
+            . f 6 1 1 1 1 6 6 6 6 6 c . . . 
+            . . f f c c c c c c c c . . . . 
+            `,img`
+            . . . . . . c c c c c c c . . . 
+            . . . . . c f f 6 6 f f 7 c . . 
+            . . . . c 7 6 6 6 6 6 6 7 6 c . 
+            . . . c 7 7 7 7 7 7 7 7 7 7 c . 
+            . . . c 7 8 1 f f 1 6 7 7 7 c . 
+            . . . f 6 f 1 f f 1 f 7 7 7 f . 
+            . . . f 6 f 2 2 2 2 f 7 7 7 f . 
+            . . c c 6 f 2 2 2 2 f 7 7 6 f . 
+            . c 7 7 7 7 2 2 2 2 7 7 f c . . 
+            c 7 1 1 1 7 7 7 7 7 c c 7 7 c . 
+            f 1 1 1 1 1 7 7 7 f c 6 7 7 7 c 
+            f 1 1 1 1 1 1 6 f c c 6 6 6 c c 
+            f 6 1 1 1 1 1 6 6 c 6 6 6 c . . 
+            f 6 1 1 1 1 1 6 6 6 6 6 6 c . . 
+            . f 6 1 1 1 1 6 6 6 6 6 c . . . 
+            . . f f c c c c c c c c . . . . 
+            `,img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . c c c c c 
+            . . . . . . . . . c c 7 7 7 6 c 
+            . . . . . . . . c c 7 7 7 c c . 
+            . . . . . . . . c 6 7 7 c . . . 
+            . . . . . . . . c 6 6 6 c . . . 
+            . . . c c c c c c 6 6 6 c c . . 
+            . . c 6 7 7 7 7 6 c c 6 6 6 c . 
+            . c 7 7 7 7 7 7 7 7 c 6 6 6 c c 
+            c 6 7 7 7 7 7 7 7 7 6 c 6 6 6 c 
+            c 7 c 6 6 6 6 c 7 7 7 c 6 6 6 c 
+            f 7 c c 6 6 c c 7 7 7 f 6 6 6 c 
+            f 7 6 f 6 6 f 6 7 7 7 f 6 6 6 c 
+            . c 1 c f f 1 c 7 6 f 6 6 c c . 
+            . c c c c c c c c c c c c . . . 
+            `,img`
+            . . . . . . . . . . . c c c c c 
+            . . . . . . . . . c c 7 7 7 6 c 
+            . . . . . . . . c c 7 7 7 c c . 
+            . . . . . . . . c 6 7 7 c . . . 
+            . . . . . . . . c 6 6 6 c . . . 
+            . . . . . . . . c 6 6 6 c c . . 
+            . . . c c c c c c c 6 6 6 c c . 
+            . . c 6 7 7 7 7 6 c c 6 6 6 c . 
+            . c 7 7 7 7 7 7 7 7 c 6 6 6 c c 
+            c 6 7 7 7 7 7 7 7 7 6 c 6 6 6 c 
+            c 7 c 6 6 6 6 c 7 7 7 c 6 6 6 c 
+            f 7 c c 6 6 c c 7 7 7 f 6 6 6 c 
+            f 7 6 f 6 6 f 6 7 7 7 f 6 6 6 c 
+            . f 7 7 7 7 7 7 7 7 6 f 6 6 c . 
+            . c 1 c f f 1 c 7 6 f 6 6 c c . 
+            . c c c c c c c c c c c c . . . 
+            `,img`
+            . . . . . . . . . . . c c c c c 
+            . . . . . . . . . c c 7 7 7 6 c 
+            . . . . . . . . c c 7 7 7 c c . 
+            . . . . . . . . c 6 7 7 c . . . 
+            . . . . . . . . c 6 6 6 c . . . 
+            . . . . . . . . c 6 6 6 c c . . 
+            . . . c c c c c c c 6 6 6 c c . 
+            . . c 6 7 7 7 7 6 c c 6 6 6 c . 
+            . c 7 7 7 7 7 7 7 7 c 6 6 6 c c 
+            c 6 7 7 7 7 7 7 7 7 6 c 6 6 6 c 
+            c 7 c 6 6 6 6 c 7 7 7 c 6 6 6 c 
+            f 7 c c 6 6 c c 7 7 7 f 6 6 6 c 
+            f 7 6 f 6 6 f 6 7 7 7 f 6 6 6 c 
+            . f 7 7 7 7 7 7 7 7 6 f 6 6 c . 
+            . c 1 c f f 1 c 7 6 f 6 6 c c . 
+            . c c c c c c c c c c c c . . . 
             `],
         500,
         true
         )
     }
-})
-forever(function () {
-	
 })
