@@ -375,29 +375,29 @@ controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
     if (playableCharacterProjectile.overlapsWith(ememyOne)) {
-        enemystatusbar.value += -33.3
+        enemystatusbar.value += -33
         info.changeScoreBy(1)
         pause(200)
     } else if (playableCharacterProjectile.overlapsWith(enemyTwo)) {
-        enemystatusbar2.value += -33.3
+        enemystatusbar2.value += -33
         info.changeScoreBy(1)
         pause(200)
     } else if (playableCharacterProjectile.overlapsWith(enemyThree)) {
-        enemystatusbar3.value += -33.3
+        enemystatusbar3.value += -33
         info.changeScoreBy(1)
         pause(200)
     } else if (playableCharacterProjectile.overlapsWith(enemyFour)) {
-        enemystatusbar4.value += -33.3
+        enemystatusbar4.value += -33
         info.changeScoreBy(1)
         pause(200)
     }
-    if (enemystatusbar.value == 0) {
+    if (enemystatusbar.value <= 33) {
         ememyOne.destroy(effects.disintegrate, 250)
-    } else if (enemystatusbar2.value == 0) {
+    } else if (enemystatusbar2.value <= 33) {
         enemyTwo.destroy(effects.disintegrate, 250)
-    } else if (enemystatusbar3.value == 0) {
+    } else if (enemystatusbar3.value <= 33) {
         enemyThree.destroy(effects.disintegrate, 250)
-    } else if (enemystatusbar4.value == 0) {
+    } else if (enemystatusbar4.value <= 33) {
         enemyFour.destroy(effects.disintegrate, 250)
     }
 })
@@ -407,7 +407,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSp
         if (movementBuff < 130) {
             movementBuff += 20
         }
-        Playablecharacter.y += -13
+        Playablecharacter.y += 13
         pause(50)
         Playablecharacter.y += 0
         ememyOne.follow(Playablecharacter, 0)
@@ -527,13 +527,13 @@ enemystatusbar.attachToSprite(ememyOne)
 enemystatusbar.setBarBorder(1, 15)
 enemyTwo = sprites.create(sprites.builtin.forestSnake0, SpriteKind.Enemy)
 enemystatusbar2 = statusbars.create(20, 4, StatusBarKind.EnemyHealth)
-enemystatusbar2.attachToSprite(enemyTwo)
 enemystatusbar2.value = 100
+enemystatusbar2.attachToSprite(enemyTwo)
 enemystatusbar2.setBarBorder(1, 15)
 enemyThree = sprites.create(sprites.builtin.forestSnake0, SpriteKind.Enemy)
 enemystatusbar3 = statusbars.create(20, 4, StatusBarKind.EnemyHealth)
-enemystatusbar3.attachToSprite(enemyThree)
 enemystatusbar3.value = 100
+enemystatusbar3.attachToSprite(enemyThree)
 enemystatusbar3.setBarBorder(1, 15)
 enemyFour = sprites.create(sprites.builtin.forestSnake0, SpriteKind.Enemy)
 enemystatusbar4 = statusbars.create(20, 4, StatusBarKind.EnemyHealth)
@@ -670,7 +670,7 @@ forever(function () {
             2 . 2 . 5 . 
             . 2 . 5 2 2 
             `, Playablecharacter, 0, 0)
-        playableCharacterProjectile.setPosition(playableCharacterProjectile.x + 18, playableCharacterProjectile.y)
+        playableCharacterProjectile.setPosition(playableCharacterProjectile.x + 17, playableCharacterProjectile.y)
         playableCharacterProjectile.lifespan = 100
         music.knock.play()
         lastpressed = game.runtime()
@@ -820,7 +820,7 @@ forever(function () {
             2 . 2 . 5 . 
             . 2 . 5 2 2 
             `, Playablecharacter, 0, 0)
-        playableCharacterProjectile.setPosition(playableCharacterProjectile.x - 10, playableCharacterProjectile.y)
+        playableCharacterProjectile.setPosition(playableCharacterProjectile.x - 17, playableCharacterProjectile.y)
         playableCharacterProjectile.lifespan = 100
         music.knock.play()
         lastpressed = game.runtime()
@@ -943,7 +943,7 @@ forever(function () {
             . . . 2 . 4 . 5 . 5 . 4 5 . 
             . . . . 2 . 4 4 . 2 5 . . . 
             `, Playablecharacter, 0, 0)
-        playableCharacterProjectile.setPosition(playableCharacterProjectile.x, playableCharacterProjectile.y + 15)
+        playableCharacterProjectile.setPosition(playableCharacterProjectile.x, playableCharacterProjectile.y + 17)
         playableCharacterProjectile.lifespan = 100
         music.knock.play()
         lastpressed = game.runtime()
