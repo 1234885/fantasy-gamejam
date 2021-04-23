@@ -96,9 +96,7 @@ function enemyAwarenessTwo (snake: Sprite) {
     }
 }
 function enemyStun (snake: Sprite) {
-    snake.follow(Playablecharacter, 0)
-    pause(5000)
-    snake.follow(Playablecharacter, 20)
+	
 }
 sprites.onOverlap(SpriteKind.Player, SpriteKind.building, function (sprite, otherSprite) {
     if (facingDown) {
@@ -220,6 +218,11 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.hole, function (sprite, otherSpr
         randomPlants.setPosition(randint(10, 160), randint(10, 120))
     }
 })
+function movementBuffChange () {
+    if (movementBuff < 130) {
+        movementBuff += 20
+    }
+}
 statusbars.onZero(StatusBarKind.Health, function (status) {
     game.over(false, effects.dissolve)
 })
@@ -383,24 +386,24 @@ controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
     if (sprite.overlapsWith(ememyOne)) {
+        info.changeScoreBy(1)
         enemystatusbar.value += -50
         enemyStun(ememyOne)
-        info.changeScoreBy(1)
         pause(200)
     } else if (sprite.overlapsWith(enemyTwo)) {
+        info.changeScoreBy(1)
         enemystatusbar2.value += -50
         enemyStun(enemyTwo)
-        info.changeScoreBy(1)
         pause(200)
     } else if (sprite.overlapsWith(enemyThree)) {
+        info.changeScoreBy(1)
         enemystatusbar3.value += -50
         enemyStun(enemyThree)
-        info.changeScoreBy(1)
         pause(200)
     } else if (sprite.overlapsWith(enemyFour)) {
+        info.changeScoreBy(1)
         enemystatusbar4.value += -50
         enemyStun(enemyFour)
-        info.changeScoreBy(1)
         pause(200)
     }
 })
@@ -424,13 +427,14 @@ let ememyOne: Sprite = null
 let Playablecharacter: Sprite = null
 let plants: Image[] = []
 let hole: Sprite = null
+let movementBuff = 0
 game.splash("Kill The Monsters!")
 let statusbar = statusbars.create(85, 6, StatusBarKind.Health)
 statusbar.setLabel("HP", 15)
 statusbar.setBarBorder(1, 15)
 statusbar.positionDirection(CollisionDirection.Top)
 statusbar.setStatusBarFlag(StatusBarFlag.SmoothTransition, true)
-let movementBuff = 70
+movementBuff = 70
 info.setScore(0)
 let timebetweenpresses = 500
 let lastpressed = 0
@@ -909,114 +913,6 @@ forever(function () {
 forever(function () {
     for (let value of list) {
         enemyAwarenessTwo(value)
-        animation.runImageAnimation(
-        value,
-        [img`
-            . . . . . c c c c c c c . . . . 
-            . . . . c 6 7 7 7 7 7 6 c . . . 
-            . . . c 7 c 6 6 6 6 c 7 6 c . . 
-            . . c 6 7 6 f 6 6 f 6 7 7 c . . 
-            . . c 7 7 7 7 7 7 7 7 7 7 c . . 
-            . . f 7 8 1 f f 1 6 7 7 7 f . . 
-            . . f 6 f 1 f f 1 f 7 7 7 f . . 
-            . . . f f 2 2 2 2 f 7 7 6 f . . 
-            . . c c f 2 2 2 2 7 7 6 f c . . 
-            . c 7 7 7 7 7 7 7 7 c c 7 7 c . 
-            c 7 1 1 1 7 7 7 7 f c 6 7 7 7 c 
-            f 1 1 1 1 1 7 6 f c c 6 6 6 c c 
-            f 1 1 1 1 1 1 6 6 c 6 6 6 c . . 
-            f 6 1 1 1 1 1 6 6 6 6 6 6 c . . 
-            . f 6 1 1 1 1 1 6 6 6 6 c . . . 
-            . . f f c c c c c c c c . . . . 
-            `,img`
-            . . . . . . c c c c c c c . . . 
-            . . . . . c f f 6 6 f f 7 c . . 
-            . . . . c 7 6 6 6 6 6 6 7 6 c . 
-            . . . c 7 7 7 7 7 7 7 7 7 7 c . 
-            . . . c 7 8 1 f f 1 6 7 7 7 c . 
-            . . . f 6 f 1 f f 1 f 7 7 7 f . 
-            . . . f 6 f 2 2 2 2 f 7 7 7 f . 
-            . . c c 6 f 2 2 2 2 f 7 7 6 f . 
-            . c 7 7 7 7 2 2 2 2 7 7 f c . . 
-            c 7 1 1 1 7 7 7 7 7 c c 7 7 c . 
-            f 1 1 1 1 1 7 7 7 f c 6 7 7 7 c 
-            f 1 1 1 1 1 1 6 f c c 6 6 6 c c 
-            f 6 1 1 1 1 1 6 6 c 6 6 6 c . . 
-            f 6 1 1 1 1 1 6 6 6 6 6 6 c . . 
-            . f 6 1 1 1 1 6 6 6 6 6 c . . . 
-            . . f f c c c c c c c c . . . . 
-            `,img`
-            . . . . . . c c c c c c c . . . 
-            . . . . . c f f 6 6 f f 7 c . . 
-            . . . . c 7 6 6 6 6 6 6 7 6 c . 
-            . . . c 7 7 7 7 7 7 7 7 7 7 c . 
-            . . . c 7 8 1 f f 1 6 7 7 7 c . 
-            . . . f 6 f 1 f f 1 f 7 7 7 f . 
-            . . . f 6 f 2 2 2 2 f 7 7 7 f . 
-            . . c c 6 f 2 2 2 2 f 7 7 6 f . 
-            . c 7 7 7 7 2 2 2 2 7 7 f c . . 
-            c 7 1 1 1 7 7 7 7 7 c c 7 7 c . 
-            f 1 1 1 1 1 7 7 7 f c 6 7 7 7 c 
-            f 1 1 1 1 1 1 6 f c c 6 6 6 c c 
-            f 6 1 1 1 1 1 6 6 c 6 6 6 c . . 
-            f 6 1 1 1 1 1 6 6 6 6 6 6 c . . 
-            . f 6 1 1 1 1 6 6 6 6 6 c . . . 
-            . . f f c c c c c c c c . . . . 
-            `,img`
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . c c c c c 
-            . . . . . . . . . c c 7 7 7 6 c 
-            . . . . . . . . c c 7 7 7 c c . 
-            . . . . . . . . c 6 7 7 c . . . 
-            . . . . . . . . c 6 6 6 c . . . 
-            . . . c c c c c c 6 6 6 c c . . 
-            . . c 6 7 7 7 7 6 c c 6 6 6 c . 
-            . c 7 7 7 7 7 7 7 7 c 6 6 6 c c 
-            c 6 7 7 7 7 7 7 7 7 6 c 6 6 6 c 
-            c 7 c 6 6 6 6 c 7 7 7 c 6 6 6 c 
-            f 7 c c 6 6 c c 7 7 7 f 6 6 6 c 
-            f 7 6 f 6 6 f 6 7 7 7 f 6 6 6 c 
-            . c 1 c f f 1 c 7 6 f 6 6 c c . 
-            . c c c c c c c c c c c c . . . 
-            `,img`
-            . . . . . . . . . . . c c c c c 
-            . . . . . . . . . c c 7 7 7 6 c 
-            . . . . . . . . c c 7 7 7 c c . 
-            . . . . . . . . c 6 7 7 c . . . 
-            . . . . . . . . c 6 6 6 c . . . 
-            . . . . . . . . c 6 6 6 c c . . 
-            . . . c c c c c c c 6 6 6 c c . 
-            . . c 6 7 7 7 7 6 c c 6 6 6 c . 
-            . c 7 7 7 7 7 7 7 7 c 6 6 6 c c 
-            c 6 7 7 7 7 7 7 7 7 6 c 6 6 6 c 
-            c 7 c 6 6 6 6 c 7 7 7 c 6 6 6 c 
-            f 7 c c 6 6 c c 7 7 7 f 6 6 6 c 
-            f 7 6 f 6 6 f 6 7 7 7 f 6 6 6 c 
-            . f 7 7 7 7 7 7 7 7 6 f 6 6 c . 
-            . c 1 c f f 1 c 7 6 f 6 6 c c . 
-            . c c c c c c c c c c c c . . . 
-            `,img`
-            . . . . . . . . . . . c c c c c 
-            . . . . . . . . . c c 7 7 7 6 c 
-            . . . . . . . . c c 7 7 7 c c . 
-            . . . . . . . . c 6 7 7 c . . . 
-            . . . . . . . . c 6 6 6 c . . . 
-            . . . . . . . . c 6 6 6 c c . . 
-            . . . c c c c c c c 6 6 6 c c . 
-            . . c 6 7 7 7 7 6 c c 6 6 6 c . 
-            . c 7 7 7 7 7 7 7 7 c 6 6 6 c c 
-            c 6 7 7 7 7 7 7 7 7 6 c 6 6 6 c 
-            c 7 c 6 6 6 6 c 7 7 7 c 6 6 6 c 
-            f 7 c c 6 6 c c 7 7 7 f 6 6 6 c 
-            f 7 6 f 6 6 f 6 7 7 7 f 6 6 6 c 
-            . f 7 7 7 7 7 7 7 7 6 f 6 6 c . 
-            . c 1 c f f 1 c 7 6 f 6 6 c c . 
-            . c c c c c c c c c c c c . . . 
-            `],
-        500,
-        true
-        )
     }
 })
 forever(function () {
