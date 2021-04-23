@@ -87,10 +87,18 @@ controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
     true
     )
 })
+statusbars.onStatusReached(StatusBarKind.EnemyHealth, statusbars.StatusComparison.LTE, statusbars.ComparisonType.Percentage, 50, function (status) {
+	
+})
 function enemyAwarenessTwo (snake: Sprite) {
     if (snake.x + 10 >= Playablecharacter.x && snake.x - 10 <= Playablecharacter.x || snake.y + 10 >= Playablecharacter.y && snake.y - 10 <= Playablecharacter.y) {
         snake.follow(Playablecharacter, 20)
     }
+}
+function enemyStun (snake: Sprite) {
+    snake.follow(Playablecharacter, 0)
+    pause(5000)
+    snake.follow(Playablecharacter, 20)
 }
 sprites.onOverlap(SpriteKind.Player, SpriteKind.building, function (sprite, otherSprite) {
     if (facingDown) {
@@ -374,79 +382,30 @@ controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
     )
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
-    if (playableCharacterProjectile.overlapsWith(ememyOne)) {
-        enemystatusbar.value += -33
+    if (sprite.overlapsWith(ememyOne)) {
+        enemystatusbar.value += -50
+        enemyStun(ememyOne)
         info.changeScoreBy(1)
         pause(200)
-    } else if (playableCharacterProjectile.overlapsWith(enemyTwo)) {
-        enemystatusbar2.value += -33
+    } else if (sprite.overlapsWith(enemyTwo)) {
+        enemystatusbar2.value += -50
+        enemyStun(enemyTwo)
         info.changeScoreBy(1)
         pause(200)
-    } else if (playableCharacterProjectile.overlapsWith(enemyThree)) {
-        enemystatusbar3.value += -33
+    } else if (sprite.overlapsWith(enemyThree)) {
+        enemystatusbar3.value += -50
+        enemyStun(enemyThree)
         info.changeScoreBy(1)
         pause(200)
-    } else if (playableCharacterProjectile.overlapsWith(enemyFour)) {
-        enemystatusbar4.value += -33
+    } else if (sprite.overlapsWith(enemyFour)) {
+        enemystatusbar4.value += -50
+        enemyStun(enemyFour)
         info.changeScoreBy(1)
         pause(200)
-    }
-    if (enemystatusbar.value <= 33) {
-        ememyOne.destroy(effects.disintegrate, 250)
-    } else if (enemystatusbar2.value <= 33) {
-        enemyTwo.destroy(effects.disintegrate, 250)
-    } else if (enemystatusbar3.value <= 33) {
-        enemyThree.destroy(effects.disintegrate, 250)
-    } else if (enemystatusbar4.value <= 33) {
-        enemyFour.destroy(effects.disintegrate, 250)
     }
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
-    if ((Playablecharacter && facingDown) == true) {
-        statusbar.value += -20
-        if (movementBuff < 130) {
-            movementBuff += 20
-        }
-        Playablecharacter.y += 13
-        pause(50)
-        Playablecharacter.y += 0
-        ememyOne.follow(Playablecharacter, 0)
-        pause(500)
-        ememyOne.follow(Playablecharacter, 20)
-    } else if ((Playablecharacter && facingLeft) == true) {
-        statusbar.value += -20
-        if (movementBuff < 130) {
-            movementBuff += 20
-        }
-        Playablecharacter.x += 13
-        pause(50)
-        Playablecharacter.x += 0
-        ememyOne.follow(Playablecharacter, 0)
-        pause(500)
-        ememyOne.follow(Playablecharacter, 20)
-    } else if (ememyOne.overlapsWith(Playablecharacter) && facingRight) {
-        statusbar.value += -20
-        if (movementBuff < 130) {
-            movementBuff += 20
-        }
-        Playablecharacter.x += -13
-        pause(50)
-        Playablecharacter.x += 0
-        ememyOne.follow(Playablecharacter, 0)
-        pause(500)
-        ememyOne.follow(Playablecharacter, 20)
-    } else if ((Playablecharacter && facingUp) == true) {
-        statusbar.value += -20
-        if (movementBuff < 130) {
-            movementBuff += 20
-        }
-        Playablecharacter.y += 13
-        pause(50)
-        Playablecharacter.y += 0
-        ememyOne.follow(Playablecharacter, 0)
-        pause(500)
-        ememyOne.follow(Playablecharacter, 20)
-    }
+	
 })
 let playableCharacterProjectile: Sprite = null
 let randomPlants: Sprite = null
@@ -465,15 +424,13 @@ let ememyOne: Sprite = null
 let Playablecharacter: Sprite = null
 let plants: Image[] = []
 let hole: Sprite = null
-let movementBuff = 0
-let statusbar: StatusBarSprite = null
 game.splash("Kill The Monsters!")
-statusbar = statusbars.create(85, 6, StatusBarKind.Health)
+let statusbar = statusbars.create(85, 6, StatusBarKind.Health)
 statusbar.setLabel("HP", 15)
 statusbar.setBarBorder(1, 15)
 statusbar.positionDirection(CollisionDirection.Top)
 statusbar.setStatusBarFlag(StatusBarFlag.SmoothTransition, true)
-movementBuff = 70
+let movementBuff = 70
 info.setScore(0)
 let timebetweenpresses = 500
 let lastpressed = 0
@@ -1060,5 +1017,16 @@ forever(function () {
         500,
         true
         )
+    }
+})
+forever(function () {
+    if (enemystatusbar.value <= 33) {
+        ememyOne.destroy(effects.disintegrate, 250)
+    } else if (enemystatusbar2.value <= 33) {
+        enemyTwo.destroy(effects.disintegrate, 250)
+    } else if (enemystatusbar3.value <= 33) {
+        enemyThree.destroy(effects.disintegrate, 250)
+    } else if (enemystatusbar4.value <= 33) {
+        enemyFour.destroy(effects.disintegrate, 250)
     }
 })
