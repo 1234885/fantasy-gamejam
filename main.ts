@@ -7,6 +7,17 @@ namespace SpriteKind {
     export const building = SpriteKind.create()
     export const hole = SpriteKind.create()
 }
+namespace StatusBarKind {
+    export const EnemyHealth2 = StatusBarKind.create()
+    export const EnemyHealth3 = StatusBarKind.create()
+    export const EnemyHealth4 = StatusBarKind.create()
+}
+statusbars.onStatusReached(StatusBarKind.EnemyHealth2, statusbars.StatusComparison.LTE, statusbars.ComparisonType.Percentage, 50, function (status) {
+	
+})
+statusbars.onStatusReached(StatusBarKind.EnemyHealth4, statusbars.StatusComparison.LTE, statusbars.ComparisonType.Percentage, 50, function (status) {
+	
+})
 controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
     facingUp = true
     facingRight = false
@@ -223,6 +234,9 @@ function movementBuffChange () {
         movementBuff += 20
     }
 }
+statusbars.onStatusReached(StatusBarKind.EnemyHealth3, statusbars.StatusComparison.LTE, statusbars.ComparisonType.Percentage, 50, function (status) {
+	
+})
 statusbars.onZero(StatusBarKind.Health, function (status) {
     game.over(false, effects.dissolve)
 })
@@ -487,17 +501,17 @@ enemystatusbar.value = 100
 enemystatusbar.attachToSprite(ememyOne)
 enemystatusbar.setBarBorder(1, 15)
 enemyTwo = sprites.create(sprites.builtin.forestSnake0, SpriteKind.Enemy)
-enemystatusbar2 = statusbars.create(20, 4, StatusBarKind.EnemyHealth)
+enemystatusbar2 = statusbars.create(20, 4, StatusBarKind.EnemyHealth2)
 enemystatusbar2.value = 100
 enemystatusbar2.attachToSprite(enemyTwo)
 enemystatusbar2.setBarBorder(1, 15)
 enemyThree = sprites.create(sprites.builtin.forestSnake0, SpriteKind.Enemy)
-enemystatusbar3 = statusbars.create(20, 4, StatusBarKind.EnemyHealth)
+enemystatusbar3 = statusbars.create(20, 4, StatusBarKind.EnemyHealth3)
 enemystatusbar3.value = 100
 enemystatusbar3.attachToSprite(enemyThree)
 enemystatusbar3.setBarBorder(1, 15)
 enemyFour = sprites.create(sprites.builtin.forestSnake0, SpriteKind.Enemy)
-enemystatusbar4 = statusbars.create(20, 4, StatusBarKind.EnemyHealth)
+enemystatusbar4 = statusbars.create(20, 4, StatusBarKind.EnemyHealth4)
 enemystatusbar4.value = 100
 enemystatusbar4.attachToSprite(enemyFour)
 enemystatusbar4.setBarBorder(1, 15)
