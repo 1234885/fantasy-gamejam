@@ -361,19 +361,28 @@ controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
     true
     )
 })
+function rejuvenation () {
+    if (statusbar.value <= 80) {
+        statusbar.value += 20
+    }
+}
 statusbars.onStatusReached(StatusBarKind.EnemyHealth4, statusbars.StatusComparison.LTE, statusbars.ComparisonType.Percentage, 1, function (status) {
+    rejuvenation()
     enemyFour.destroy(effects.disintegrate, 250)
     slayedEnemies += 1
 })
 statusbars.onStatusReached(StatusBarKind.EnemyHealth2, statusbars.StatusComparison.LTE, statusbars.ComparisonType.Percentage, 1, function (status) {
+    rejuvenation()
     enemyTwo.destroy(effects.disintegrate, 250)
     slayedEnemies += 1
 })
 function enemyHit () {
     statusbar.value += -20
+    info.changeScoreBy(-1)
     pause(200)
 }
 statusbars.onStatusReached(StatusBarKind.EnemyHealth3, statusbars.StatusComparison.LTE, statusbars.ComparisonType.Percentage, 1, function (status) {
+    rejuvenation()
     enemyThree.destroy(effects.disintegrate, 250)
     slayedEnemies += 1
 })
@@ -397,6 +406,7 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, oth
     }
 })
 statusbars.onStatusReached(StatusBarKind.EnemyHealth, statusbars.StatusComparison.LTE, statusbars.ComparisonType.Percentage, 1, function (status) {
+    rejuvenation()
     ememyOne.destroy(effects.disintegrate, 250)
     slayedEnemies += 1
 })
