@@ -484,8 +484,7 @@ Playablecharacter = sprites.create(img`
 Playablecharacter.say("Oh great, I'm trapped", 3500)
 scene.cameraFollowSprite(Playablecharacter)
 let spawnPointsX = [16, 304]
-let spawnPointsY = [96, 200]
-Playablecharacter.setPosition(spawnPointsX[randint(0, spawnPointsX.length - 1)], spawnPointsY[randint(0, spawnPointsY.length - 1)])
+Playablecharacter.setPosition(spawnPointsX[randint(0, spawnPointsX.length)], 96)
 Playablecharacter.setStayInScreen(true)
 ememyOne = sprites.create(sprites.builtin.forestSnake0, SpriteKind.Enemy)
 enemystatusbar = statusbars.create(20, 4, StatusBarKind.EnemyHealth)
