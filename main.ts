@@ -411,6 +411,7 @@ statusbars.onStatusReached(StatusBarKind.EnemyHealth, statusbars.StatusCompariso
     slayedEnemies += 1
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
+    movementBuffChange()
     if ((Playablecharacter && facingDown) == true) {
         Playablecharacter.y += -13
         enemyHit()
